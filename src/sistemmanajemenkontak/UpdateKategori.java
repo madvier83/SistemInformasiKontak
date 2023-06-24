@@ -13,12 +13,12 @@ import javax.swing.JOptionPane;
  *
  * @author Advie Rifaldy
  */
-public class AddKategori extends javax.swing.JFrame {
+public class UpdateKategori extends javax.swing.JFrame {
 
     /**
      * Creates new form AddKontak
      */
-    public AddKategori() {
+    public UpdateKategori() {
         initComponents();
     }
 
@@ -26,6 +26,11 @@ public class AddKategori extends javax.swing.JFrame {
 
     public void setPrev(KontakForm kf) {
         prevKf = kf;
+    }
+    public String UpdateId;
+
+    public void setId(String id) {
+        UpdateId = id;
     }
 
     /**
@@ -41,6 +46,7 @@ public class AddKategori extends javax.swing.JFrame {
         namaKategori = new javax.swing.JTextField();
         jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
+        deleteKategori = new javax.swing.JToggleButton();
         kategoriError = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -69,6 +75,15 @@ public class AddKategori extends javax.swing.JFrame {
             }
         });
 
+        deleteKategori.setBackground(new java.awt.Color(255, 0, 51));
+        deleteKategori.setForeground(new java.awt.Color(255, 255, 255));
+        deleteKategori.setText("Hapus Kategori");
+        deleteKategori.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                deleteKategoriActionPerformed(evt);
+            }
+        });
+
         kategoriError.setForeground(new java.awt.Color(255, 51, 51));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -82,7 +97,8 @@ public class AddKategori extends javax.swing.JFrame {
                     .addComponent(jLabel1)
                     .addComponent(namaKategori, javax.swing.GroupLayout.PREFERRED_SIZE, 350, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(188, 188, 188)
+                        .addComponent(deleteKategori)
+                        .addGap(73, 73, 73)
                         .addComponent(jButton2)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jButton1)))
@@ -97,10 +113,11 @@ public class AddKategori extends javax.swing.JFrame {
                 .addComponent(namaKategori, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(kategoriError)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 34, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 32, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton1)
-                    .addComponent(jButton2))
+                    .addComponent(jButton2)
+                    .addComponent(deleteKategori))
                 .addGap(33, 33, 33))
         );
 
@@ -115,24 +132,23 @@ public class AddKategori extends javax.swing.JFrame {
         // TODO add your handling code here:
         try {
             String nama = namaKategori.getText();
-            if (namaKategori.getText().isEmpty()) {
+            if(namaKategori.getText().isEmpty()) {
                 kategoriError.setText("Required");
-            } else {
-
-                PreparedStatement pst = new KontakForm().con.prepareStatement("INSERT INTO `kategori`(`nama`) VALUES (?)");
-                pst.setString(1, nama);
-
-                int ok = pst.executeUpdate();
-                if (ok >= 1) {
-                    setVisible(false);
-                    JOptionPane.showMessageDialog(this, "Kategori berhasil ditambahkan!");
-                    namaKategori.setText("");
-                }
-
-                prevKf.fetchKategori();
+                return;
             }
+
+            PreparedStatement pst = new KontakForm().con.prepareStatement("UPDATE `kategori` SET `nama`='" + nama + "' WHERE id = " + UpdateId);
+
+            int ok = pst.executeUpdate();
+            if (ok >= 1) {
+                setVisible(false);
+                JOptionPane.showMessageDialog(this, "Kategori berhasil diperbarui!");
+                namaKategori.setText("");
+            }
+
+            prevKf.fetchKategori();
         } catch (SQLException ex) {
-            Logger.getLogger(AddKategori.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(UpdateKategori.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_jButton1ActionPerformed
 
@@ -140,6 +156,27 @@ public class AddKategori extends javax.swing.JFrame {
         // TODO add your handling code here:
         this.setVisible(false);
     }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void deleteKategoriActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteKategoriActionPerformed
+        // TODO add your handling code here:
+
+        try {
+
+            PreparedStatement pst = new KontakForm().con.prepareStatement("DELETE FROM `kategori` WHERE id = " + UpdateId);
+
+            int ok = pst.executeUpdate();
+
+            if (ok >= 1) {
+                setVisible(false);
+                JOptionPane.showMessageDialog(this, "Kontak berhasil dihapus!");
+            }
+
+            prevKf.fetchKategori();
+
+        } catch (SQLException ex) {
+            Logger.getLogger(AddKategori.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_deleteKategoriActionPerformed
 
     /**
      * @param args the command line arguments
@@ -158,30 +195,37 @@ public class AddKategori extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(AddKategori.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(UpdateKategori.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(AddKategori.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(UpdateKategori.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(AddKategori.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(UpdateKategori.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(AddKategori.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(UpdateKategori.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
         //</editor-fold>
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new AddKategori().setVisible(true);
+                new UpdateKategori().setVisible(true);
             }
         });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JToggleButton deleteKategori;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel kategoriError;
-    private javax.swing.JTextField namaKategori;
+    public javax.swing.JTextField namaKategori;
     // End of variables declaration//GEN-END:variables
 }

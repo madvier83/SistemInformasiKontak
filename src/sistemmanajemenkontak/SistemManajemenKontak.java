@@ -22,6 +22,7 @@ public class SistemManajemenKontak {
         frame.setTitle("Sistem Infromasi Kontak");
 
         frame.fetchKontak();
+        frame.fetchKategori();
     }
     
 }

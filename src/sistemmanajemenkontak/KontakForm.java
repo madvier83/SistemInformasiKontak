@@ -32,6 +32,8 @@ public class KontakForm extends javax.swing.JFrame {
     public Connection con;
     public PreparedStatement pst;
     public KontakForm kf = this;
+    public UpdateKontak update = new UpdateKontak();
+    public UpdateKategori updateKategori = new UpdateKategori();
 
     public void Connect() throws ClassNotFoundException {
         try {
@@ -64,18 +66,34 @@ public class KontakForm extends javax.swing.JFrame {
     private void initComponents() {
 
         jLabel2 = new javax.swing.JLabel();
+        jTabbedPane1 = new javax.swing.JTabbedPane();
+        jPanel1 = new javax.swing.JPanel();
+        jButton1 = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         tableKontak = new javax.swing.JTable();
-        jButton1 = new javax.swing.JButton();
+        reloadKontak1 = new javax.swing.JButton();
+        jPanel2 = new javax.swing.JPanel();
         addKategoriBtn = new javax.swing.JButton();
-        reloadKontak = new javax.swing.JButton();
+        reloadKategori = new javax.swing.JButton();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        tableKategori = new javax.swing.JTable();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setBackground(new java.awt.Color(255, 255, 255));
+        setLocationByPlatform(true);
+        setResizable(false);
 
         jLabel2.setFont(new java.awt.Font("Segoe UI Black", 0, 28)); // NOI18N
         jLabel2.setText("Sistem Informasi Kontak");
         jLabel2.setToolTipText("");
+
+        jButton1.setBackground(new java.awt.Color(0, 51, 255));
+        jButton1.setForeground(new java.awt.Color(255, 255, 255));
+        jButton1.setText("Tambah Kontak");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
 
         tableKontak.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -92,19 +110,53 @@ public class KontakForm extends javax.swing.JFrame {
         if (tableKontak.getColumnModel().getColumnCount() > 0) {
             tableKontak.getColumnModel().getColumn(0).setPreferredWidth(24);
             tableKontak.getColumnModel().getColumn(0).setMaxWidth(24);
-            tableKontak.getColumnModel().getColumn(1).setPreferredWidth(160);
-            tableKontak.getColumnModel().getColumn(1).setMaxWidth(160);
             tableKontak.getColumnModel().getColumn(2).setPreferredWidth(320);
             tableKontak.getColumnModel().getColumn(2).setMaxWidth(320);
+            tableKontak.getColumnModel().getColumn(2).setHeaderValue("Alamat");
+            tableKontak.getColumnModel().getColumn(3).setHeaderValue("Email");
+            tableKontak.getColumnModel().getColumn(4).setHeaderValue("No Telepon");
+            tableKontak.getColumnModel().getColumn(5).setHeaderValue("Kategori ");
         }
 
-        jButton1.setText("Tambah Kontak");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        reloadKontak1.setText("Reload 🔄️");
+        reloadKontak1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                reloadKontak1ActionPerformed(evt);
             }
         });
 
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 839, Short.MAX_VALUE)
+                        .addContainerGap())
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(jButton1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(reloadKontak1)
+                        .addGap(14, 14, 14))))
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jButton1)
+                    .addComponent(reloadKontak1))
+                .addGap(18, 18, 18)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 507, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
+        );
+
+        jTabbedPane1.addTab("Kontak", jPanel1);
+
+        addKategoriBtn.setBackground(new java.awt.Color(0, 51, 255));
+        addKategoriBtn.setForeground(new java.awt.Color(255, 255, 255));
         addKategoriBtn.setText("Tambah Kategori");
         addKategoriBtn.setToolTipText("");
         addKategoriBtn.addActionListener(new java.awt.event.ActionListener() {
@@ -113,12 +165,62 @@ public class KontakForm extends javax.swing.JFrame {
             }
         });
 
-        reloadKontak.setText("Reload 🔄️");
-        reloadKontak.addActionListener(new java.awt.event.ActionListener() {
+        reloadKategori.setText("Reload 🔄️");
+        reloadKategori.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                reloadKontakActionPerformed(evt);
+                reloadKategoriActionPerformed(evt);
             }
         });
+
+        tableKategori.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null},
+                {null, null},
+                {null, null},
+                {null, null}
+            },
+            new String [] {
+                "ID", " Nama Kategori"
+            }
+        ));
+        jScrollPane2.setViewportView(tableKategori);
+        if (tableKategori.getColumnModel().getColumnCount() > 0) {
+            tableKategori.getColumnModel().getColumn(0).setPreferredWidth(24);
+            tableKategori.getColumnModel().getColumn(0).setMaxWidth(24);
+        }
+
+        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
+        jPanel2.setLayout(jPanel2Layout);
+        jPanel2Layout.setHorizontalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(addKategoriBtn)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 630, Short.MAX_VALUE)
+                .addComponent(reloadKategori)
+                .addContainerGap())
+            .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jPanel2Layout.createSequentialGroup()
+                    .addContainerGap()
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 839, Short.MAX_VALUE)
+                    .addContainerGap()))
+        );
+        jPanel2Layout.setVerticalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(addKategoriBtn)
+                    .addComponent(reloadKategori))
+                .addContainerGap(531, Short.MAX_VALUE))
+            .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                    .addContainerGap(51, Short.MAX_VALUE)
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 507, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addContainerGap()))
+        );
+
+        jTabbedPane1.addTab("Kategori", jPanel2);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -127,31 +229,17 @@ public class KontakForm extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addGap(27, 27, 27)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel2)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jButton1)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(addKategoriBtn)
-                        .addGap(528, 528, 528)
-                        .addComponent(reloadKontak)))
-                .addContainerGap(33, Short.MAX_VALUE))
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jScrollPane1)
-                .addContainerGap())
+                    .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 851, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel2))
+                .addContainerGap(26, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(26, 26, 26)
                 .addComponent(jLabel2)
-                .addGap(34, 34, 34)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(addKategoriBtn)
-                    .addComponent(jButton1)
-                    .addComponent(reloadKontak))
-                .addGap(32, 32, 32)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 530, Short.MAX_VALUE)
+                .addGap(28, 28, 28)
+                .addComponent(jTabbedPane1)
                 .addContainerGap())
         );
 
@@ -164,7 +252,7 @@ public class KontakForm extends javax.swing.JFrame {
         add.setVisible(true);
         add.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         add.setTitle("Tambah Kontak");
-        add.setLocation(460, 280);
+        add.setLocation(610, 280);
         add.fetchKategori();
         add.setPrev(this);
     }//GEN-LAST:event_jButton1ActionPerformed
@@ -175,13 +263,19 @@ public class KontakForm extends javax.swing.JFrame {
         add.setVisible(true);
         add.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         add.setTitle("Tambah Kategori");
-        add.setLocation(460, 280);
+        add.setLocation(610, 280);
+        add.setPrev(this);
     }//GEN-LAST:event_addKategoriBtnActionPerformed
 
-    private void reloadKontakActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_reloadKontakActionPerformed
+    private void reloadKategoriActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_reloadKategoriActionPerformed
         // TODO add your handling code here:
         fetchKontak();
-    }//GEN-LAST:event_reloadKontakActionPerformed
+    }//GEN-LAST:event_reloadKategoriActionPerformed
+
+    private void reloadKontak1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_reloadKontak1ActionPerformed
+        // TODO add your handling code here:
+        fetchKategori();
+    }//GEN-LAST:event_reloadKontak1ActionPerformed
 
     public void fetchKontak() {
         try {
@@ -221,9 +315,9 @@ public class KontakForm extends javax.swing.JFrame {
                         String no_telepon = (String) tableKontak.getValueAt(selectedRow, 4);
                         String kategori_id = (String) tableKontak.getValueAt(selectedRow, 5);
 
-                        UpdateKontak update = new UpdateKontak();
+//                        UpdateKontak update = new UpdateKontak();
                         update.setVisible(true);
-                        update.setLocation(460, 280);
+                        update.setLocation(620, 280);
                         update.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
                         update.setTitle("Update Data " + nama);
                         update.fetchKategori();
@@ -242,6 +336,53 @@ public class KontakForm extends javax.swing.JFrame {
         }
     }
 
+    
+    public void fetchKategori() {
+        try {
+            java.sql.Statement st = con.createStatement();
+            ResultSet rs = st.executeQuery("SELECT * FROM kategori");
+            ResultSetMetaData rsmd = (ResultSetMetaData) rs.getMetaData();
+
+            int columnsNumber = rsmd.getColumnCount();
+
+            System.out.println("Kontak : Ok");
+            DefaultTableModel df = (DefaultTableModel) tableKategori.getModel();
+
+            df.setRowCount(0);
+            while (rs.next()) {
+                Vector v2 = new Vector();
+                for (int i = 0; i < columnsNumber; i++) {
+                    v2.add(rs.getString("id"));
+                    v2.add(rs.getString("nama"));
+                }
+                df.addRow(v2);
+            }
+
+            // Add the onclick event to the table
+            tableKategori.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mouseClicked(MouseEvent e) {
+                    int selectedRow = tableKategori.getSelectedRow();
+                    if (selectedRow != -1) {
+                        String id = (String) tableKategori.getValueAt(selectedRow, 0);
+                        String nama = (String) tableKategori.getValueAt(selectedRow, 1);
+
+//                        UpdateKategori update = new UpdateKategori();
+                        updateKategori.setVisible(true);
+                        updateKategori.setLocation(620, 280);
+                        updateKategori.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+                        updateKategori.setTitle("Update Kategori " + nama);
+                        updateKategori.setId(id);
+                        updateKategori.namaKategori.setText(nama);
+                        updateKategori.setPrev(kf);
+                    }
+                }
+            });
+        } catch (SQLException ex) {
+            Logger.getLogger(KontakForm.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
     public void closeFrame() {
         this.dispose(); // Close the frame
     }
@@ -299,8 +440,14 @@ public class KontakForm extends javax.swing.JFrame {
     public javax.swing.JButton addKategoriBtn;
     private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JButton reloadKontak;
+    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JTabbedPane jTabbedPane1;
+    private javax.swing.JButton reloadKategori;
+    private javax.swing.JButton reloadKontak1;
+    private javax.swing.JTable tableKategori;
     private javax.swing.JTable tableKontak;
     // End of variables declaration//GEN-END:variables
 }
